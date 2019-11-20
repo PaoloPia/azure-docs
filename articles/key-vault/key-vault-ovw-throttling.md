@@ -62,7 +62,9 @@ Code that implements exponential backoff is shown below.
                 await func();
             }
             catch (Exception ex) when (ex is TimeoutException ||
-                ex is System.Net.Http.HttpRequestException)
+                ex is System.Net.Http.HttpRequestException ||
+                (ex is Microsoft.Azure.KeyVault.Models.KeyVaultErrorException 
+                    && ((Microsoft.Azure.KeyVault.Models.KeyVaultErrorException)ex).Message.Contains("'429'")))
             {
                 Debug.WriteLine("Exception raised is: " +
                     ex.GetType().ToString() +
